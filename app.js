@@ -39,9 +39,9 @@ app.use(express.static(path.join(__dirname,"/public")));
 const sessionOptions={
           secret:"mysupersecretcode",
           resave:false,
-          saveUnintialized:true,
+          saveUninitialized:false,
           cookie:{
-                    expires: Date.now() + 7 * 24 * 60 * 1000,
+                    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
                     maxAge: 7 * 24 * 60 * 60 * 1000,
                     httpOnly: true,
           },
@@ -64,6 +64,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req,res,next)=>{
           res.locals.success=req.flash("success");
           res.locals.error=req.flash("error");
+          res.locals.currUser=req.user;
           next();
 });
 
@@ -75,8 +76,6 @@ app.use((req,res,next)=>{
 //           let registeredUser=await User.register(fakeUser,"helloworld");
 //           res.send(registeredUser);
 // });
-
-app.use("/listings/:id/reviews",reviewRouter);
 
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
