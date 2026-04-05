@@ -9,15 +9,8 @@ const listingSchema=new Schema({
           },
           description:String,
           image:{
-                    url:{
-                              type:String,
-                              default:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-                    },
-                    filename:{
-                              type:String,
-                              default:"listingimage",
-                    },
-                            
+                  url:String,
+                  filename:String,                          
           },
           //           set: (v) => v ==="" ? "https://unsplash.com/photos/vast-icy-plain-under-a-soft-blue-and-pink-sky-llezNN2OGEY" : v, 
           // },
@@ -34,6 +27,17 @@ const listingSchema=new Schema({
             type:Schema.Types.ObjectId,
             ref:"User",
           },
+          geometry:{
+            type:{ 
+            type: String,
+            enum: ["Point"],
+            required: true
+      },
+          coordinates:{
+            type:[Number],
+            require:true,
+          }
+      }
 });
 
 listingSchema.post("findOneAndDelete",async(listing)=>{
