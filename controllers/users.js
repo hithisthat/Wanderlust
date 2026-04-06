@@ -1,14 +1,14 @@
 const User=require("../models/user");
 
 module.exports.renderSignupForm=(req,res)=>{
-          res.render("users/signup.ejs");
+          return res.render("users/signup.ejs");
 };
 
 module.exports.renderLoginForm=(req,res)=>{
-          res.render("users/login.ejs");
+          return res.render("users/login.ejs");
 };
 
-module.exports.signup=async(req,res)=>{
+module.exports.signup=async(req,res,next)=>{
           console.log(req.body);
           try{
                     let {username,email,password}=req.body;
@@ -20,18 +20,19 @@ module.exports.signup=async(req,res)=>{
                               return next(err);
                     }
                     req.flash("success","Welcome to Wanderlust");
-                    res.redirect("/listings");
+                    return res.redirect("/listings");
           });
           }catch(e){
                     req.flash("error",e.message);
-                    res.redirect("/signup");
+                    return res.redirect("/signup");
           }
 };
 
 module.exports.login=async(req,res)=>{
+          console.log("LOGIN USER:",req.user);
           req.flash("success","Welcome back to Wanderlust!");
           let redirectUrl=res.locals.redirectUrl || "/listings";
-          res.redirect(redirectUrl);
+          return res.redirect(redirectUrl);
 };
 
 module.exports.logout=(req,res,next)=>{
@@ -40,6 +41,6 @@ module.exports.logout=(req,res,next)=>{
                               return next(err);
                     }
                     req.flash("success","You are logged out!");
-                    res.redirect("/listings");
+                    return res.redirect("/listings");
           });
 };
